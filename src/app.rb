@@ -7,6 +7,8 @@ class MainApp < Sinatra::Base
     register Sinatra::Reloader
   end
   get '/' do
-    'hello, world'
+    @title = 'hello'
+    @message = 'Hello, World!'
+    erb :index
   end
 end
