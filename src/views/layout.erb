@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title><%= @title %></title>
+    <%= @styles.map{|style| 
+        '<link rel="stylesheet" type="text/css" href="./css/' + style + '">' 
+        }.join('\n') %>
 </head>
 
 <body>
