@@ -57,3 +57,7 @@ a.signup-link>span {
   color: #79589f;
   text-decoration: underline;
 }
+
+.error {
+  color: red;
+}

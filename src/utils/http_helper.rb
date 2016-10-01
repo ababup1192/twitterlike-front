@@ -5,11 +5,25 @@ require 'uri'
 # HttpHelper Module
 module HttpHelper
   def post_request_to(request_path, request_body, error_path)
+    session[:error] = nil
     response = HttpHelper.post_request(request_path, request_body)
+    body = JSON.parse(response.body, symbolize_names: true)
     if response.code.to_i == 200
-      body = JSON.parse(response.body, symbolize_names: true)
       yield(body)
     else
+      session[:error] = body[:error]
+      redirect error_path
+    end
+  end
+
+  def form_error_to(name_with_pass, error_path)
+    name_define = name_with_pass[:name].empty? == false
+    password_define = name_with_pass[:password].empty? == false
+
+    if name_define && password_define
+      yield
+    else
+      session[:error] = 'Name or Password is empty.'
       redirect error_path
     end
   end

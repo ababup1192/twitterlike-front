@@ -25,40 +25,40 @@ class MainApp < Sinatra::Base
   get '/login' do
     @title = 'Twitterlike -Login-'
     @styles = ['login.css']
+    @error = session[:error]
+
     erb :login
   end
 
   post '/login' do
-    name = params[:name]
-    pass = params[:password]
-    name_with_path = { name: name, password: pass }
+    name_with_path = { name: params[:name], password: params[:password] }
 
-    redirect '/login' if name.empty? || pass.empty?
-
-    post_request_to('users/auth', name_with_path, 'login') do |body|
-      session[:id] = body[:id]
-      session[:token] = body[:token]
-      redirect '/'
+    form_error_to(name_with_path, '/login') do
+      post_request_to('users/auth', name_with_path, 'login') do |body|
+        session[:id] = body[:id]
+        session[:token] = body[:token]
+        redirect '/'
+      end
     end
   end
 
   get '/signup' do
     @title = 'Twitterlike -Sign up-'
     @styles = ['signup.css']
+    @error = session[:error]
+
     erb :signup
   end
 
   post '/signup' do
-    name = params[:name]
-    pass = params[:password]
-    name_with_path = { name: name, password: pass }
+    name_with_path = { name: params[:name], password: params[:password] }
 
-    redirect 'signup' if name.empty? || pass.empty?
-
-    post_request_to('users', name_with_path, 'signup') do |body|
-      session[:id] = body[:id]
-      session[:token] = body[:token]
-      redirect '/'
+    form_error_to(name_with_path, '/signup') do
+      post_request_to('users', name_with_path, 'signup') do |body|
+        session[:id] = body[:id]
+        session[:token] = body[:token]
+        redirect '/'
+      end
     end
   end
 end

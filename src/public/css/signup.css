@@ -50,3 +50,7 @@
 .signup-form input[type="submit"]:hover {
   background: #2F7EC0;
 }
+
+.error {
+  color: red;
+}
