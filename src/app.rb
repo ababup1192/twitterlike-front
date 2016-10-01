@@ -12,18 +12,13 @@ class MainApp < Sinatra::Base
   end
 
   get '/' do
-    id = session[:id]
-    token = session[:token]
+    id_with_token = { id: session[:id], token: session[:token] }
 
-    response = post_request('users/auth/token', id: id, token: token)
-    body = JSON.parse(response.body, symbolize_names: true)
-    if response.code.to_i == 200
+    post_request_to('users/auth/token', id_with_token, 'login') do |body|
       @title = 'Twitterlike'
       @message = body.to_s
       @styles = []
       erb :index
-    else
-      redirect '/login'
     end
   end
 
@@ -36,20 +31,14 @@ class MainApp < Sinatra::Base
   post '/login' do
     name = params[:name]
     pass = params[:password]
-    if name.empty? == false || pass.empty? == false
-      response = post_request('users/auth', name: name, password: pass)
-      body = JSON.parse(response.body, symbolize_names: true)
-      if response.code.to_i == 200
-        session[:id] = body[:id]
-        session[:token] = body[:token]
-        redirect '/'
-      else
-        # id & pass 間違い
-        redirect '/login'
-      end
-    else
-      # 空
-      redirect '/login'
+    name_with_path = { name: name, password: pass }
+
+    redirect '/login' if name.empty? || pass.empty?
+
+    post_request_to('users/auth', name_with_path, 'login') do |body|
+      session[:id] = body[:id]
+      session[:token] = body[:token]
+      redirect '/'
     end
   end
 
@@ -60,23 +49,26 @@ class MainApp < Sinatra::Base
   end
 
   post '/signup' do
-    session[:signup_err] = nil
     name = params[:name]
     pass = params[:password]
-    if name.empty? == false || pass.empty? == false
-      response = post_request('users', name: name, password: pass)
+    name_with_path = { name: name, password: pass }
+
+    redirect 'signup' if name.empty? || pass.empty?
+
+    post_request_to('users', name_with_path, 'signup') do |body|
+      session[:id] = body[:id]
+      session[:token] = body[:token]
+      redirect '/'
+    end
+  end
+
+  private def post_request_to(request_path, request_body, error_path)
+    response = post_request(request_path, request_body)
+    if response.code.to_i == 200
       body = JSON.parse(response.body, symbolize_names: true)
-      if response.code.to_i == 200
-        session[:id] = body[:id]
-        session[:token] = body[:token]
-        redirect '/'
-      else
-        redirect 'signup'
-      end
+      yield(body)
     else
-      session[:signup_err] = :empty_form
-      session[:error_mes] = 'Name or Password is empty.'
-      redirect 'signup'
+      redirect error_path
     end
   end
 
