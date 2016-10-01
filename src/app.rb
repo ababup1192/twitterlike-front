@@ -1,11 +1,11 @@
 require 'sinatra'
 require 'sinatra/reloader'
-require 'json'
-require 'net/http'
-require 'uri'
+require_relative 'utils/http_helper'
 
 # Sinatra Main controller
 class MainApp < Sinatra::Base
+  include HttpHelper
+
   use Rack::Session::Pool, expire_after: 2_592_000
   configure :development do
     register Sinatra::Reloader
@@ -60,24 +60,5 @@ class MainApp < Sinatra::Base
       session[:token] = body[:token]
       redirect '/'
     end
-  end
-
-  private def post_request_to(request_path, request_body, error_path)
-    response = post_request(request_path, request_body)
-    if response.code.to_i == 200
-      body = JSON.parse(response.body, symbolize_names: true)
-      yield(body)
-    else
-      redirect error_path
-    end
-  end
-
-  private def post_request(path, body)
-    uri_str = "http://localhost:9393/#{path}"
-    uri = URI.parse(uri_str)
-    req = Net::HTTP::Post.new(uri.path,
-                              'Content-Type' => 'application/json')
-    req.body = body.to_json
-    Net::HTTP.start(uri.host, uri.port) { |http| http.request(req) }
   end
 end
