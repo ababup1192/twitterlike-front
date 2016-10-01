@@ -2,11 +2,15 @@
   text-align: center;
 }
 
+.logo {
+    text-decoration: none;
+}
+
 .main h1 {
   color: #57367d;
 }
 
-.login-form {
+.signup-form {
   display: flex;
   flex-direction: column;
   width: 350px;
@@ -17,14 +21,14 @@
   background: #F9F9FB;
 }
 
-.login-form h2 {
+.signup-form h2 {
   margin: 0 0 20px 0;
   color: #57367d;
   font-size: 22px;
   font-weight: normal;
 }
 
-.login-form input {
+.signup-form input {
   padding: 10px 12px;
   font-size: 14px;
   line-height: 1.42857;
@@ -36,24 +40,13 @@
   margin-top: 20px;
 }
 
-.login-form input[type="submit"] {
+.signup-form input[type="submit"] {
   font-size: 18px;
   color: #fff;
-  background: #79589f;
+  background: #4A90E2;
   cursor: pointer;
 }
 
-.login-form input[type="submit"]:hover {
-  background: #57367d;
-}
-
-a.signup-link {
-  margin-top: 25px;
-  color: #8D8797;
-  text-decoration: none;
-}
-
-a.signup-link>span {
-  color: #79589f;
-  text-decoration: underline;
+.signup-form input[type="submit"]:hover {
+  background: #2F7EC0;
 }
