@@ -5,7 +5,7 @@ class UnfollowList extends React.Component {
 
     render() {
         const list = this.props.list.map((user) =>
-            <li>{ user }</li>
+            <li>{ user.name }</li>
         );
         return <ul>{ list }</ul>;
     }

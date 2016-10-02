@@ -7,7 +7,8 @@ class MainApp < Sinatra::Base
   include HttpHelper
 
   use Rack::Session::Pool, expire_after: 2_592_000
-  configure :development do
+
+  configure do
     register Sinatra::Reloader
   end
 
@@ -15,6 +16,9 @@ class MainApp < Sinatra::Base
     id_with_token = { id: session[:id], token: session[:token] }
 
     post_request_to('users/auth/token', id_with_token, 'login') do |body|
+      @id = session[:id]
+      @token = session[:token]
+
       @title = 'Twitterlike'
       @message = body.to_s
       @styles = []
