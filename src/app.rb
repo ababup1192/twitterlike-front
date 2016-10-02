@@ -16,11 +16,11 @@ class MainApp < Sinatra::Base
     id_with_token = { id: session[:id], token: session[:token] }
 
     post_request_to('users/auth/token', id_with_token, 'login') do |body|
-      @id = session[:id]
-      @token = session[:token]
+      @id = body[:id]
+      @token = body[:token]
+      @name = body[:name]
 
       @title = 'Twitterlike'
-      @message = body.to_s
       @styles = []
       erb :index
     end
@@ -32,6 +32,13 @@ class MainApp < Sinatra::Base
     @error = session[:error]
 
     erb :login
+  end
+
+  get '/logout' do
+    session[:id] = nil
+    session[:token] = nil
+    session[:name] = nil
+    redirect '/login'
   end
 
   post '/login' do

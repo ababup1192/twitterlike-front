@@ -11,10 +11,8 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        const id = localStorage.getItem("id");
-
-        this.reloadUnfollowers(id);
-        this.reloadTimeline(id);
+        this.reloadUnfollowers(this.props.userId);
+        this.reloadTimeline(this.props.userId);
     }
 
     // inputの内容が変わったら、textに内容を反映。
@@ -27,10 +25,7 @@ class App extends React.Component {
     handleKeyDown(e) {
         // エンターキーが押され、かつ内容が空じゃなかったときの処理
         if (e.keyCode === 13 && this.state.tweetText !== "") {
-            const id = localStorage.getItem("id");
-
-            this.reloadTimeline(id);
-            // stateに反映。
+            this.postTweet(id, this.state.tweetText);
             this.setState({
                 unfollowers: this.state.unfollowers,
                 tweetText: "",
@@ -42,10 +37,14 @@ class App extends React.Component {
     render() {
         return <div>
             <header>
-                <p>name</p>
+                <p>{ this.props.name }</p>
                 <a href="/logout">Logout</a>
             </header>
-            <UnfollowList list={ this.state.unfollowers } />
+            <UnfollowList
+                list={ this.state.unfollowers }
+                userId={ this.props.userId}
+                postFollow={ this.postFollow.bind(this) }
+                />
             <input
                 value={this.state.tweetText}
                 placeholder="ツイート"
@@ -87,6 +86,40 @@ class App extends React.Component {
                 console.error(response);
             });
     }
+
+    postTweet(userId, text) {
+        const json = JSON.stringify({ user_id: userId, text: text });
+        fetch(`${HOST}/tweets`, {
+            method: 'POST',
+            body: json
+        }).then((response) =>
+            response.json()
+            ).then((json) => {
+                this.reloadTimeline(userId);
+                console.log(json);
+            }).catch((error) =>
+                console.error(error)
+            );
+    }
+
+    postFollow(userId, followId) {
+        const json = JSON.stringify({ user_id: userId, follow_id: followId });
+        fetch(`${HOST}/follows`, {
+            method: 'POST',
+            body: json
+        }).then((response) =>
+            response.json()
+            ).then((json) => {
+                this.reloadUnfollowers(userId);
+                this.reloadTimeline(userId);
+                console.log(json);
+            }).catch((error) =>
+                console.error(error)
+            );
+    }
 }
 
-ReactDOM.render(<App/>, document.getElementById("app"));
+const id = Number(localStorage.getItem("id"));
+const token = localStorage.getItem("token");
+const name = localStorage.getItem("name");
+ReactDOM.render(<App userId={id} token={token} name={name}/>, document.getElementById("app"));
