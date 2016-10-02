@@ -13,6 +13,13 @@ class App extends React.Component {
     componentDidMount() {
         this.reloadUnfollowers(this.props.userId);
         this.reloadTimeline(this.props.userId);
+
+        setInterval(() =>
+            this.reloadUnfollowers(this.props.userId)
+            , 1000);
+        setInterval(() =>
+            this.reloadTimeline(this.props.userId)
+            , 1000);
     }
 
     // inputの内容が変わったら、textに内容を反映。
