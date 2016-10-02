@@ -21,7 +21,7 @@ class MainApp < Sinatra::Base
       @name = body[:name]
 
       @title = 'Twitterlike'
-      @styles = []
+      @styles = ['main.css']
       erb :index
     end
   end

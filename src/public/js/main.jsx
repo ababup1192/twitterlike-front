@@ -37,21 +37,28 @@ class App extends React.Component {
     render() {
         return <div>
             <header>
-                <p>{ this.props.name }</p>
-                <a href="/logout">Logout</a>
+                <a href="/logout">
+                    { this.props.name } &nbsp;
+                    <span>Logout</span>
+                </a>
             </header>
-            <UnfollowList
-                list={ this.state.unfollowers }
-                userId={ this.props.userId}
-                postFollow={ this.postFollow.bind(this) }
-                />
-            <input
-                value={this.state.tweetText}
-                placeholder="ツイート"
-                onChange={(e) => this.handleChange(e) }
-                onKeyDown={(e) => this.handleKeyDown(e) }
-                />
-            <Timeline tweets={ this.state.tweets } />
+            <div className="contents">
+                <UnfollowList
+                    list={ this.state.unfollowers }
+                    userId={ this.props.userId}
+                    postFollow={ this.postFollow.bind(this) }
+                    />
+                <div className="contents-main">
+                    <input
+                        className="tweet-form"
+                        value={this.state.tweetText}
+                        placeholder="ツイート"
+                        onChange={(e) => this.handleChange(e) }
+                        onKeyDown={(e) => this.handleKeyDown(e) }
+                        />
+                    <Timeline tweets={ this.state.tweets } />
+                </div>
+            </div>
         </div>;
     }
 

@@ -1,0 +1,58 @@
+header {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+header a {
+    text-decoration: none;
+}
+
+a.header>span {
+    text-decoration: underline;
+}
+
+.contents {
+    display: flex;
+}
+
+.unfollow-list {
+    width: 200px;
+    list-style: none;
+    border: 1px solid #cbcbd2;
+    background: #F9F9FB;
+}
+
+.unfollow-list-item>p>input {
+    margin-left: 10px; 
+}
+
+.contents-main {
+    margin: 0 15px;
+    flex: 1;
+}
+
+.tweet-form {
+    width: 220px;
+    padding: 10px 12px;
+    font-size: 14px;
+    line-height: 1.42857;
+    color: #3f3f44;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #cbcbd2;
+    border-radius: 4px;
+    margin-top: 20px;
+}
+
+.timeline {
+    padding: 20px;
+    border: 1px solid #cbcbd2;
+    list-style: none;
+    max-height: 300px;
+    overflow: auto;
+}
+
+.timeline>li {
+    margin-bottom: 10px;
+}

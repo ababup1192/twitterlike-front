@@ -7,6 +7,6 @@ class Timeline extends React.Component {
         const tweets = this.props.tweets.reverse().map((tweet) =>
             <li>{ `${tweet.name}: ${tweet.text}` }</li>
         );
-        return <ul>{ tweets }</ul>;
+        return <ul className="timeline">{ tweets }</ul>;
     }
 }
