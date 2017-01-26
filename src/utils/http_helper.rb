@@ -29,11 +29,15 @@ module HttpHelper
   end
 
   def self.post_request(path, body)
-    uri_str = "http://localhost:9393/#{path}"
+    uri_str = "https://twitterlike-api.au-syd.mybluemix.net/#{path}"
     uri = URI.parse(uri_str)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = uri.scheme == 'https'
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
     req = Net::HTTP::Post.new(uri.path,
                               'Content-Type' => 'application/json')
     req.body = body.to_json
-    Net::HTTP.start(uri.host, uri.port) { |http| http.request(req) }
+    http.request(req)
   end
 end

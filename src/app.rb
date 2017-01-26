@@ -14,7 +14,6 @@ class MainApp < Sinatra::Base
 
   get '/' do
     id_with_token = { id: session[:id], token: session[:token] }
-
     post_request_to('users/auth/token', id_with_token, 'login') do |body|
       @id = body[:id]
       @token = body[:token]

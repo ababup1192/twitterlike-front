@@ -1,4 +1,4 @@
-const HOST = "http://localhost:9393";
+const HOST = "https://twitterlike-api.au-syd.mybluemix.net";
 
 class App extends React.Component {
     constructor(props) {
